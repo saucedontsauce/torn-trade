@@ -1,30 +1,22 @@
-// /api/sheet.js
-let cache = { data: null, ts: 0 };
-
 export default async function handler(req, res) {
-    const now = Date.now();
-    const fifteenMinutes = 15 * 60 * 1000;
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    // Reuse cached data if it's still fresh
-    if (cache.data && now - cache.ts < fifteenMinutes) {
-        res.setHeader("Cache-Control", "public, max-age=60");
-        return res.status(200).json(cache.data);
-    }
+    if (req.method === "OPTIONS") { return res.status(200).end() };
 
-    // Otherwise, fetch fresh data from Google Apps Script
-    const sheetUrl =
-        "https://script.google.com/macros/s/AKfycbwvf8Zo6gnETfBkPep2ZMELcQjxOf5e_1ExNtQtK9JFoJom1JCIoRIuW95-J1v_KnnFLw/exec";
+    const sheetUrl = "https://script.google.com/macros/s/AKfycbwvf8Zo6gnETfBkPep2ZMELcQjxOf5e_1ExNtQtK9JFoJom1JCIoRIuW95-J1v_KnnFLw/exec";
 
     try {
-        const resp = await fetch(sheetUrl);
-        const data = await resp.json();
+        const response = await fetch(sheetUrl);
+        const data = await response.json();
 
-        cache = { data, ts: now };
+        // Cache for 15 min on the CDN
+        res.setHeader("Cache-Control", "s-maxage=900, stale-while-revalidate");
 
-        res.setHeader("Cache-Control", "public, max-age=60");
         return res.status(200).json(data);
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
         return res.status(500).json({ error: "Failed to fetch sheet data" });
     }
 }
