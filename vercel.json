@@ -1,14 +1,16 @@
 {
-    "version": 2,
+    "version": 3,
+    "buildCommand": "yarn build",
+    "outputDirectory": "dist",
     "functions": {
-        "api/*.js": {
+        "api/**/*.js": {
             "runtime": "nodejs20.x"
         }
     },
     "routes": [
         {
             "src": "/api/(.*)",
-            "dest": "/api/$1.js"
+            "dest": "/api/$1"
         }
     ]
 }
