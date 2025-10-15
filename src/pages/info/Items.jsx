@@ -7,7 +7,10 @@ import Pagination from "@/components/Pagination";
 // Item card
 function ItemCard({ item }) {
     return (
-        <div className="border border-gray-700 rounded-lg p-4 shadow hover:shadow-lg transition duration-200 bg-gray-800 text-gray-100">
+        <div className="relative border border-gray-700 rounded-lg p-4 shadow hover:shadow-lg transition duration-200 bg-gray-800 text-gray-100">
+            <button className="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                +
+            </button>
             <h2 className="text-xl font-bold mb-2">{item.name}</h2>
             <p className="text-gray-400 mb-2">{item.type}</p>
             <p className="mb-2">{item.description}</p>

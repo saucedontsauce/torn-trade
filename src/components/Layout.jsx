@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 import { useApp } from "@/context/AppContext";
@@ -33,8 +33,9 @@ export function Navbar() {
         { name: "List", path: "/user/list" },
     ];
 
+
     return (
-        <nav className="bg-gray-800 shadow-lg sticky top-0">
+        <nav className="bg-gray-800 shadow-lg sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
                     <Link to="/" className="text-2xl font-bold text-blue-400">

@@ -1,6 +1,6 @@
 export default function fetchSheetData(cb) {
     const sheetUrl =
-        "https://torn-trade-nnmnn.vercel.app/";
+        "https://torn-trade-nnmnn.vercel.app/api/sheet.js";
     const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(sheetUrl);
 
     const getData = () =>

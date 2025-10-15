@@ -3,17 +3,29 @@ import { useApp } from '@/context/AppContext'
 
 import { Card } from '@/components/ui/Card'
 
-import CatCard from "@/components/CatCard"
-
 import { db } from "@/firebase/config"
-import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router";
 
+function CatCard({ cat, name }) {
+    return (
+        <div className="relative border border-gray-700 rounded-lg p-4 shadow hover:shadow-lg transition duration-200 bg-gray-800 text-gray-100">
+            <h2 className="text-xl font-bold mb-2">{name}</h2>
+            {/*<p className="text-gray-400 mb-2">{item.type}</p>
+            <p className="mb-2">{item.description}</p>*/}
+            {Object.keys(cat).map((item) => <div key={item} className="flex justify-between text-sm text-gray-300">
+                <span><img src={`https://www.torn.com/images/items/${item}/small.png`} className="inline" alt="img" />{cat[item].name}</span>
+                <span> ${cat[item].rate === "definitive" ? cat[item].val : cat[item].val * cat[item].market_price}</span>
+            </div>)}
+        </div>
+    );
+}
+
 export default function TEMPLATE1(props) {
-    const { user } = useApp()
     const { items, categories } = useMemo(() => { let categories = [], items = {}; props.items.items.map((i) => { items[i.id] = i; if (!categories.includes(i.type)) categories.push(i.type); }); return { items: items, categories: categories } }, [props.items]);
 
     const navigate = useNavigate()
+    const { id } = useParams()
 
     const [loading, setLoading] = useState(true)
 
@@ -22,10 +34,12 @@ export default function TEMPLATE1(props) {
 
 
     async function getdata() {
-        const ref = doc(db, "users", user.uid);
-        const snapshot = await getDoc(ref);
-        if (snapshot.exists()) {
-            const data = snapshot.data()
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("link", "==", id));
+
+        const querySnapshot = await getDocs(q);
+        const data = { ...querySnapshot.docs[0].data() }
+        if (querySnapshot.docs[0].exists() && querySnapshot.docs[0].data().public == true) {
             if (data.credits = 0) {
                 navigate("/man-dont-pay")
             } else {
@@ -57,7 +71,7 @@ export default function TEMPLATE1(props) {
         <h1>loading prices</h1>
     </Card>
     return <div className="p-6 max-w-5xl mx-auto bg-gray-900 min-h-screen text-gray-100">
-        <h1 className="text-3xl font-bold mb-6">Your Price List</h1>
+        <h1 className="text-3xl font-bold mb-6">{list?.scheme?.title ? list.scheme.title : `${list.owner}'s Price List`}</h1>
 
         {/* Items Grid */}
         <div className="grid gap-4 sm:grid-cols-2">
