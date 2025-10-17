@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useApp } from "@/context/AppContext";
 import { Card } from '@/components/ui/Card'
 import { Link } from 'react-router'
 
@@ -9,9 +8,8 @@ import writeDoc from '@/firebase/fn/writeDoc'
 
 
 
-export default function Profile() {
+export default function Profile({ user, setUser }) {
 
-    const { user, setUser } = useApp()
 
     const auth = getAuth();
 
@@ -35,7 +33,7 @@ export default function Profile() {
 
             return () => clearTimeout(timer);
         }
-    }, [verifyCooldown, nameCooldown, linkCooldown]);
+    }, [verifyCooldown, nameCooldown, linkCooldown, user]);
 
     const handleNameChange = async () => {
         // TODO: Add logic to update username in Firestore or Auth

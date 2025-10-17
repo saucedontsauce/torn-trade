@@ -70,7 +70,7 @@ export default function App() {
               </Route >
 
               <Route path="/user" element={user ? <Outlet /> : <Navigate to="/" />}>
-                <Route index element={<ProfilePage />} />
+                <Route index element={<ProfilePage user={user} setUser={setUser} />} />
                 <Route path="list" element={<ListPage itemsProp={items} user={user} />} />
               </Route>
 
