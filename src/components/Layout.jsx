@@ -1,3 +1,5 @@
+// File provides Footer and Navbar components
+
 import { Link, NavLink, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
@@ -9,12 +11,14 @@ import { FaUser, FaCaretDown } from 'react-icons/fa'
 import { signOut } from "firebase/auth"
 
 export function Footer() {
+    // footer UI component
     return <footer className="py-4 text-center text-sm text-gray-500 border-t border-gray-700">
         &copy; {new Date().getFullYear()}  some text or something, maybe links
     </footer>
 }
 
 export function Navbar() {
+    // Navbar UI component
     const navigate = useNavigate();
 
     const { user, auth } = useApp()
@@ -29,7 +33,7 @@ export function Navbar() {
     ];
 
     const userNavItems = [
-        { name: "Items", path: "/info" },
+        { name: "Items", path: "/items" },
         { name: "List", path: "/user/list" },
     ];
 
@@ -46,7 +50,7 @@ export function Navbar() {
 
                     {/* Desktop menu */}
                     <div className="hidden md:flex space-x-6">
-                        {navItems.map((item) => (
+                        {!user && navItems.map((item) => (
                             <NavLink
                                 key={item.path}
                                 to={item.path}

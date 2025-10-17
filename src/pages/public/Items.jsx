@@ -1,16 +1,22 @@
-import { useApp } from "@/context/AppContext";
 import { useState, useEffect, useMemo } from "react";
 
 import Pagination from "@/components/Pagination";
 
+import writeDoc from '@/firebase/fn/writeDoc'
 
 // Item card
-function ItemCard({ item }) {
+function ItemCard({ item, user, setUser }) {
+    const handleAdd = async (item) => {
+        console.log("handling add for", item.name)
+        await writeDoc("users", { list: { ...user.list, [item.id]: { name: item.name, rate: "comparative", val: 1 } } }, user.uid, true)
+        setUser({ ...user, list: { ...user.list, [item.id]: { name: item.name, rate: "comparative", val: 1 } } })
+    }
+
     return (
         <div className="relative border border-gray-700 rounded-lg p-4 shadow hover:shadow-lg transition duration-200 bg-gray-800 text-gray-100">
-            <button className="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-8 h-8 flex items-center justify-center">
+            {user && <button onClick={() => handleAdd(item)} className="cursor-pointer absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-8 h-8 flex items-center justify-center">
                 +
-            </button>
+            </button>}
             <h2 className="text-xl font-bold mb-2">{item.name}</h2>
             <p className="text-gray-400 mb-2">{item.type}</p>
             <p className="mb-2">{item.description}</p>
@@ -43,8 +49,7 @@ function SkeletonCard() {
     );
 }
 
-export default function ItemsPage() {
-    const { items } = useApp()
+export default function ItemsPage({ items, user, setUser }) {
 
 
     const [types, setTypes] = useState([]);
@@ -97,6 +102,8 @@ export default function ItemsPage() {
         setCurrentPage(num);
     };
 
+
+
     return (
         <div className="p-6 max-w-5xl mx-auto bg-gray-900 min-h-screen text-gray-100">
             <h1 className="text-3xl font-bold mb-6">Items</h1>
@@ -147,7 +154,7 @@ export default function ItemsPage() {
                 {!items
                     ? Array.from({ length: 4 }).map((_, idx) => <SkeletonCard key={idx} />)
                     : currentItems.length > 0 ? (
-                        currentItems.map((item) => <ItemCard key={item.id} item={item} />)
+                        currentItems.map((item) => <ItemCard key={item.id} item={item} user={user} setUser={setUser} />)
                     ) : (
                         <div className="col-span-full text-center py-12 text-gray-400">
                             <p className="text-lg">No items found.</p>

@@ -10,24 +10,24 @@ import { initializeUserData } from "@/firebase/initUserData"
 
 
 import { Navbar, Footer } from "@/components/Layout";
-import Chat from "@/components/Chat";
+import ChatPage from "@/components/Chat";
 
 
-const Home = lazy(() => import("@/pages/public/Home"));
-const About = lazy(() => import("@/pages/public/About"));
-const Login = lazy(() =>
+const HomePage = lazy(() => import("@/pages/public/Home"));
+const AboutPage = lazy(() => import("@/pages/public/About"));
+const LoginPage = lazy(() =>
   import("@/pages/public/index.jsx").then((m) => ({ default: m.Login }))
 );
-const Register = lazy(() =>
+const RegisterPage = lazy(() =>
   import("@/pages/public/index.jsx").then((m) => ({ default: m.Register }))
 );
-const TEMPLATE1 = lazy(() => import("@/pages/public/Home"));
+const Items = lazy(() => import("@/pages/public/Items"));
 
 
-const Profile = lazy(() => import("@/pages/user/Profile"));
-const List = lazy(() => import("@/pages/user/List"));
 
-const Items = lazy(() => import("@/pages/info/Items"));
+const ProfilePage = lazy(() => import("@/pages/user/Profile"));
+const ListPage = lazy(() => import("@/pages/user/List"));
+
 
 export default function App() {
   const [user, setUser] = useState(null)
@@ -61,22 +61,18 @@ export default function App() {
           <main className="flex-grow container mx-auto p-6">
             <Routes>
               <Route path="/"  >
-                <Route index element={<Home items={items} />} />
-                <Route path="about" element={<About />} />
-                <Route path="login" element={user ? <Navigate to="/" /> : <Login />} />
-                <Route path="register" element={user ? <Navigate to="/" /> : <Register />} />
-                <Route path="chat" element={user ? <Chat /> : <Navigate to="/" />} />
-                <Route path=":id" element={<TEMPLATE1 items={items} />} />
+                <Route index element={<HomePage items={items} />} />
+                <Route path="about" element={<AboutPage />} />
+                <Route path="login" element={user ? <Navigate to="/" /> : <LoginPage />} />
+                <Route path="register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
+                <Route path="chat" element={user ? <ChatPage /> : <Navigate to="/" />} />
+                <Route path="items" element={<Items items={items} user={user} setUser={setUser} />} />
               </Route >
 
               <Route path="/user" element={user ? <Outlet /> : <Navigate to="/" />}>
-                <Route index element={<Profile />} />
-                <Route path="list" element={<List items={items} />} />
+                <Route index element={<ProfilePage />} />
+                <Route path="list" element={<ListPage itemsProp={items} user={user} />} />
               </Route>
-
-              <Route path="/info" element={user ? <Outlet /> : <Navigate to="/" />} >
-                <Route index element={<Items />} />
-              </Route >
 
             </Routes>
           </main>

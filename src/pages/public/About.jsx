@@ -1,50 +1,124 @@
+import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-function FAQItem({ question, answer }) {
-    const [open, setOpen] = useState(false)
-
-    return (
-        <div className="border-b py-3">
-            <button
-                onClick={() => setOpen(!open)}
-                className="w-full cursor-pointer flex justify-between items-center text-left text-lg font-medium focus:outline-none"
-            >
-                <span>{question}</span>
-                <span className="text-gray-500">{open ? "−" : "+"}</span>
-            </button>
-            {open && (
-                <p className="mt-2 text-gray-600 transition-all duration-200">
-                    {answer}
-                </p>
-            )}
-        </div>
-    )
-}
+const faqData = [
+    {
+        question: "What is Torn Trade Helper?",
+        answer:
+            "Torn Trade Helper is an all-in-one assistant for Torn.com traders. It provides live item prices, pricing sheets, trade templates, and a community chat to help you optimize every trade.",
+    },
+    {
+        question: "Do I need a Torn.com account?",
+        answer:
+            "Technically no, but there'd not really be any point. You can log in and create a price sheet and access trade templates without providing your API key, although you'll need a Torn.com account + API key for features such as automatic name changing.",
+    },
+    {
+        question: "Is my data safe?",
+        answer:
+            "Absolutely. Your account info is securely handled via Firebase Authentication, and we do not store sensitive Torn passwords.",
+    },
+    {
+        question: "How often are item prices updated?",
+        answer:
+            "Prices are updated in real-time whenever our backend fetches the latest data from Torn.com. You always get the most accurate market info.",
+    },
+];
 
 export default function About() {
-    const faqs = [
-        { question: "How do I reset my password?", answer: "Currently, I've not got it rigged up but i will soon.", future_answer: "Click 'Forgot password?' on the login screen." },
-        { question: "Can I use Google sign-in?", answer: "Yes! Just click 'Sign in with Google' on the login page." },
-        { question: "Is my data private?", answer: "Yes. Your todos and chat messages are tied to your account only." },
-        { question: "Do you use my API key?", answer: "No. Your API key is only used to fill out data on your end, non of your torn data is stored in my database." }
-    ]
+    const [openIndex, setOpenIndex] = useState(null);
+
+    const toggleFAQ = (index) => {
+        setOpenIndex(openIndex === index ? null : index);
+    };
 
     return (
-        <div>
-            <div className="max-w-2xl mx-auto p-6">
-                <h1 className="text-3xl font-semibold mb-6">About</h1>
-                <p>
-                    This dashboard securely fetches Torn.com API data through Google Apps Script,
-                    keeping my API key safe while serving fast, static pages on GitHub Pages that can feed from automatically updating data.
+        <div className="flex flex-col gap-16 container mx-auto p-6">
+            {/* HERO */}
+            <section className="text-center mt-10">
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                    About Torn Trade Helper
+                </h1>
+                <p className="text-gray-400 max-w-2xl mx-auto text-lg md:text-xl">
+                    Torn Trade Helper is designed to make your trading in Torn.com faster,
+                    smarter, and more efficient. Track prices, save trade templates, and
+                    connect with the community—all in one place.
                 </p>
-            </div>
-            <div className="max-w-2xl mx-auto p-6">
-                <h1 className="text-3xl font-semibold mb-6">Frequently Asked Questions</h1>
-                {faqs.map((faq, i) => (
-                    <FAQItem key={i} {...faq} />
-                ))}
-            </div>
+            </section>
 
+            {/* FEATURES */}
+            <section className="grid md:grid-cols-3 gap-8">
+                <div className="p-6 bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition">
+                    <h2 className="text-xl font-semibold mb-2 text-indigo-400">
+                        Live Price Tracking
+                    </h2>
+                    <p className="text-gray-400">
+                        Always know the current market value of items with real-time price
+                        updates.
+                    </p>
+                </div>
+
+                <div className="p-6 bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition">
+                    <h2 className="text-xl font-semibold mb-2 text-indigo-400">
+                        Trade Templates
+                    </h2>
+                    <p className="text-gray-400">
+                        Save commonly used trade offers for quick and consistent deals.
+                    </p>
+                </div>
+
+                <div className="p-6 bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition">
+                    <h2 className="text-xl font-semibold mb-2 text-indigo-400">
+                        Community Chat
+                    </h2>
+                    <p className="text-gray-400">
+                        Connect with other traders to share insights, tips, and deals in
+                        real-time.
+                    </p>
+                </div>
+            </section>
+
+            {/* FAQ */}
+            <section className="max-w-3xl mx-auto">
+                <h2 className="text-3xl font-bold text-white mb-6 text-center">FAQ</h2>
+                <div className="flex flex-col gap-4">
+                    {faqData.map((item, index) => (
+                        <div
+                            key={index}
+                            className="bg-gray-800 rounded-xl p-4 cursor-pointer"
+                            onClick={() => toggleFAQ(index)}
+                        >
+                            <div className="flex justify-between items-center">
+                                <h3 className="text-lg md:text-xl font-semibold text-white">
+                                    {item.question}
+                                </h3>
+                                <ChevronDown
+                                    className={`w-5 h-5 text-indigo-400 transition-transform ${openIndex === index ? "rotate-180" : ""
+                                        }`}
+                                />
+                            </div>
+                            {openIndex === index && (
+                                <p className="mt-2 text-gray-400">{item.answer}</p>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* CTA */}
+            <section className="text-center py-10">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                    Ready to start trading smarter?
+                </h2>
+                <p className="text-gray-400 mb-6">
+                    Join Torn Trade Helper today and take your trades to the next level.
+                </p>
+                <a
+                    href="/register"
+                    className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition"
+                >
+                    Sign Up Now
+                </a>
+            </section>
         </div>
     );
 }

@@ -1,77 +1,61 @@
-import { useEffect, useRef, useState, useMemo } from "react";
-import { useApp } from '@/context/AppContext'
+import { useEffect, useState, useMemo } from "react";
+import CatCard from "@/components/CatCard";
 
-import { Card } from '@/components/ui/Card'
+export default function List({ itemsProp, user }) {
+    // Build items lookup and categories
+    const { items, categories } = useMemo(() => {
+        let categories = [];
+        let itemsMap = {};
+        itemsProp?.items?.forEach((i) => {
+            itemsMap[i.id] = i;
+            if (!categories.includes(i.type)) categories.push(i.type);
+        });
+        return { items: itemsMap, categories };
+    }, [itemsProp]);
 
-import CatCard from "@/components/CatCard"
-
-import { db } from "@/firebase/config"
-import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
-import { useNavigate, useParams } from "react-router";
-
-export default function TEMPLATE1(props) {
-    const { user } = useApp()
-    const { items, categories } = useMemo(() => { let categories = [], items = {}; props.items.items.map((i) => { items[i.id] = i; if (!categories.includes(i.type)) categories.push(i.type); }); return { items: items, categories: categories } }, [props.items]);
-
-    const navigate = useNavigate()
-
-    const [loading, setLoading] = useState(true)
-
-    const [list, setList] = useState({});
     const [display, setDisplay] = useState({});
 
-
-    async function getdata() {
-        const ref = doc(db, "users", user.uid);
-        const snapshot = await getDoc(ref);
-        if (snapshot.exists()) {
-            const data = snapshot.data()
-            if (data.credits = 0) {
-                navigate("/man-dont-pay")
-            } else {
-                setList({ owner: data.displayName, list: data.list, order: data.order, scheme: data.scheme })
-                setLoading(false);
-            }
-        } else {
-            navigate("/")
-        }
-    };
-
     useEffect(() => {
-        if (Object.keys(list).length === 0) {
-            getdata();
-        } else {
+        if (!user?.list) {
             setDisplay({});
-            (list.order || categories).map((category) => {
-                let catitems = Object.entries(list.list).filter((v) => items[v[0]].type === category)
-                let catobj = {}
-                catitems.forEach(v => catobj[v[0]] = { ...v[1], ...items[v[0]] })
-                Object.keys(catobj).length > 0 && setDisplay({ ...display, [category]: catobj })
-            });
+            return;
         }
-    }, [list]);
 
+        const newDisplay = {};
+        (user.order?.length ? user.order : categories).forEach((category) => {
+            const catItems = Object.entries(user.list).filter(
+                ([id]) => items[id]?.type === category
+            );
 
+            if (catItems.length > 0) {
+                newDisplay[category] = {};
+                catItems.forEach(([id, data]) => {
+                    newDisplay[category][id] = { ...data, ...items[id] };
+                });
+            }
+        });
 
-    if (!list) return <Card>
-        <h1>loading prices</h1>
-    </Card>
-    return <div className="p-6 max-w-5xl mx-auto bg-gray-900 min-h-screen text-gray-100">
-        <h1 className="text-3xl font-bold mb-6">Your Price List</h1>
+        setDisplay(newDisplay);
+    }, [user, items, categories]);
 
-        {/* Items Grid */}
-        <div className="grid gap-4 sm:grid-cols-2">
+    return (
+        <div className="p-6 max-w-6xl mx-auto bg-gray-900 min-h-screen text-gray-100">
+            <h1 className="text-3xl font-bold mb-6">Your Price List</h1>
+
             {Object.keys(display).length > 0 ? (
-                Object.keys(display).map((item) => <CatCard key={item} name={item} cat={display[item]} />)
+                <div className="grid gap-6 sm:grid-cols-2">
+                    {Object.keys(display).map((category) => (
+                        <CatCard key={category} name={category} cat={display[category]} />
+                    ))}
+                </div>
             ) : (
-                <div className="col-span-full text-center py-12 text-gray-400">
+                <div className="text-center py-12 text-gray-400">
                     <p className="text-lg">No items to show.</p>
-                    <p className="text-sm text-gray-500">Try changing your filters or asking this seller to add more items.</p>
+                    <p className="text-sm text-gray-500">
+                        Try changing your filters or ask this seller to add more items.
+                    </p>
                 </div>
             )}
         </div>
-
-
-    </div>
-
+    );
 }
