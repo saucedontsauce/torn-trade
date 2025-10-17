@@ -41,7 +41,7 @@ export default function App() {
   }, [])
 
 
-  if (loading) return <div className="h-screen bg-gray-900 text-gray-100 flex items-center justify-center">Loading...</div>
+  if (loading || !items) return <div className="h-screen bg-gray-900 text-gray-100 flex items-center justify-center">Loading...</div>
 
   return (
     <AppContext.Provider value={{ db, auth, user, items, setUser }}>
