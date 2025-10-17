@@ -24,7 +24,7 @@ export async function initializeUserData(user, setUser) {
         setUser(userDoc)
 
         await addDoc(collection(db, 'messages'), {
-            text: `👋 ${user.displayName || 'User'} joined the chat!`,
+            text: `👋 a new member joined the chat!`,
             uid: 'System',
             displayName: 'System',
             photoURL: '',

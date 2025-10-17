@@ -10,7 +10,6 @@ export default function Home() {
 
 
     useEffect(() => {
-        console.log(hash)
         if (hash) {
             setUserHash(hash.split("").splice(1, hash.length).join(""))
         }
