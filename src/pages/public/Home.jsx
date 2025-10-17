@@ -1,12 +1,23 @@
 import { useLocation } from "react-router";
 import { useApp } from "@/context/AppContext";
 import TEMPLATE1 from "./TEMPLATE1";
+import { useEffect, useState } from "react";
 export default function Home() {
     const { hash } = useLocation();
-    console.log(hash)
     const { items } = useApp();
 
-    if (hash) return <TEMPLATE1 items={items} hash={hash} />
+    cosnt[userHash, setUserHash] = useState(false)
+
+
+    useEffect(() => {
+        console.log(hash)
+        if (hash) {
+            setUserHash(hash.split("").splice(1, props.hash.length).join(""))
+        }
+    }, [hash])
+
+
+    if (userHash) { return <TEMPLATE1 items={items} hash={userHash} /> }
 
 
     return (
