@@ -4,12 +4,12 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss()],
   base: mode === 'production' ? '/torn-trade/' : '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
-  }
-})
+  },
+}))
