@@ -3,6 +3,7 @@ import { useApp } from "@/context/AppContext";
 import TEMPLATE1 from "./TEMPLATE1";
 export default function Home() {
     const { hash } = useLocation();
+    console.log(hash)
     const { items } = useApp();
 
     if (hash) return <TEMPLATE1 items={items} hash={hash} />
