@@ -6,7 +6,7 @@ export default function Home() {
     const { hash } = useLocation();
     const { items } = useApp();
 
-    cosnt[userHash, setUserHash] = useState(false)
+    const [userHash, setUserHash] = useState(false)
 
 
     useEffect(() => {
