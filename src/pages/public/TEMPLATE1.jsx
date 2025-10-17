@@ -26,7 +26,6 @@ export default function TEMPLATE1(props) {
 
     const navigate = useNavigate()
     const id = props.hash.split("").splice(1, props.hash.length).join("");
-    console.log(id)
 
     const [loading, setLoading] = useState(true)
 
