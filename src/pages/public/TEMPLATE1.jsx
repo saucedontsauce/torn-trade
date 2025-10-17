@@ -25,7 +25,8 @@ export default function TEMPLATE1(props) {
     const { items, categories } = useMemo(() => { let categories = [], items = {}; props.items.items.map((i) => { items[i.id] = i; if (!categories.includes(i.type)) categories.push(i.type); }); return { items: items, categories: categories } }, [props.items]);
 
     const navigate = useNavigate()
-    const { id } = useParams()
+    const id = props.hash.split("").splice(1, props.hash.length).join("");
+    console.log(id)
 
     const [loading, setLoading] = useState(true)
 
@@ -65,6 +66,7 @@ export default function TEMPLATE1(props) {
         }
     }, [list]);
 
+    console.log(list)
 
 
     if (!list) return <Card>

@@ -1,6 +1,12 @@
+import { useLocation } from "react-router";
 import { useApp } from "@/context/AppContext";
+import TEMPLATE1 from "./TEMPLATE1";
 export default function Home() {
+    const { hash } = useLocation();
     const { items } = useApp();
+
+    if (hash) return <TEMPLATE1 items={items} hash={hash} />
+
 
     return (
         <div>

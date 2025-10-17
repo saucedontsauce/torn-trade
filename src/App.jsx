@@ -50,7 +50,7 @@ export default function App() {
         <main className="flex-grow container mx-auto p-6">
           <Routes>
             <Route path="/"  >
-              <Route index element={<Home />} />
+              <Route index element={<Home items={items} />} />
               <Route path="about" element={<About />} />
               <Route path="login" element={user ? <Navigate to="/" /> : <Login />} />
               <Route path="register" element={user ? <Navigate to="/" /> : <Register />} />
