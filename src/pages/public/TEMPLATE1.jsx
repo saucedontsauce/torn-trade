@@ -21,7 +21,7 @@ function CatCard({ cat, name }) {
     );
 }
 
-export default function TEMPLATE1(props) {
+export default function TEMPLATE1({ ...props }) {
     const { items, categories } = useMemo(() => { let categories = [], items = {}; props.items.items.map((i) => { items[i.id] = i; if (!categories.includes(i.type)) categories.push(i.type); }); return { items: items, categories: categories } }, [props.items]);
 
     const navigate = useNavigate()
