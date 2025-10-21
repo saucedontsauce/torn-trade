@@ -28,6 +28,10 @@ const Items = lazy(() => import("@/pages/public/Items"));
 const ProfilePage = lazy(() => import("@/pages/user/Profile"));
 const ListPage = lazy(() => import("@/pages/user/List"));
 
+import { PrivacyPage, TermsPage, CookiePolicyPage, DataRequestPage } from '@/pages/legal'
+import CookieConsent from "@/components/legal/CookieConsent";
+const ContactPage = lazy(() => import("@/pages/public/Contact"));
+
 
 export default function App() {
   const [user, setUser] = useState(null)
@@ -51,6 +55,7 @@ export default function App() {
   }, [])
 
 
+
   if (loading || !items) return <div className="h-screen bg-gray-900 text-gray-100 flex items-center justify-center">Loading...</div>
 
   return (
@@ -67,16 +72,30 @@ export default function App() {
                 <Route path="register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
                 <Route path="chat" element={user ? <ChatPage /> : <Navigate to="/" />} />
                 <Route path="items" element={<Items items={items} user={user} setUser={setUser} />} />
+                <Route path="contact" element={<ContactPage />} />
               </Route >
+
+              <Route path="/legal">
+                <Route path="privacy" element={<PrivacyPage />} />
+                <Route path="terms" element={<TermsPage />} />
+                <Route path="cookies" element={<CookiePolicyPage />} />
+                <Route path="data-request" element={<DataRequestPage />} />
+              </Route>
 
               <Route path="/user" element={user ? <Outlet /> : <Navigate to="/" />}>
                 <Route index element={<ProfilePage user={user} setUser={setUser} />} />
                 <Route path="list" element={<ListPage itemsProp={items} user={user} />} />
               </Route>
 
+              <Route
+                path="admin/support"
+                element={user && user.isAdmin ? <SupportDashboard /> : <Navigate to="/" />}
+              />
+
             </Routes>
           </main>
           <Footer />
+          <CookieConsent />
         </div>
       </AppContext.Provider>
     </Suspense>

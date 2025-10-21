@@ -11,10 +11,51 @@ import { FaUser, FaCaretDown } from 'react-icons/fa'
 import { signOut } from "firebase/auth"
 
 export function Footer() {
-    // footer UI component
-    return <footer className="py-4 text-center text-sm text-gray-500 border-t border-gray-700">
-        &copy; {new Date().getFullYear()}  some text or something, maybe links
-    </footer>
+    return (
+        <footer className="bg-gray-900 border-t border-gray-800 py-8 mt-12">
+            <div className="container mx-auto px-6 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
+
+                {/* App Name / Branding */}
+                <div className="mb-4 sm:mb-0">
+                    <span className="text-gray-200 font-semibold">YourApp</span> © {new Date().getFullYear()}
+                </div>
+
+                {/* Legal Links */}
+                <div className="flex flex-wrap justify-center gap-4">
+                    <Link
+                        to="/legal/privacy"
+                        className="hover:text-blue-400 transition-colors duration-200"
+                    >
+                        Privacy Policy
+                    </Link>
+                    <Link
+                        to="/legal/terms"
+                        className="hover:text-blue-400 transition-colors duration-200"
+                    >
+                        Terms of Service
+                    </Link>
+                    <Link
+                        to="/legal/cookies"
+                        className="hover:text-blue-400 transition-colors duration-200"
+                    >
+                        Cookie Policy
+                    </Link>
+                    <Link
+                        to="/contact"
+                        className="hover:text-blue-400 transition-colors duration-200"
+                    >
+                        Contact
+                    </Link>
+                    <Link
+                        to="/legal/data-request"
+                        className="hover:text-blue-400 transition-colors duration-200"
+                    >
+                        Data Request
+                    </Link>
+                </div>
+            </div>
+        </footer>
+    );
 }
 
 export function Navbar() {

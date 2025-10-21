@@ -13,7 +13,7 @@ export async function initializeUserData(user, setUser) {
             {
                 displayName: user.displayName || 'Anonymous',
                 email: user.email,
-                credits: 0,
+                credits: 7,
                 photoURL: user.photoURL || '',
                 createdAt: serverTimestamp(),
                 lastLogin: serverTimestamp()
